@@ -12,3 +12,13 @@ const (
 	OBJECT_BLOB   ObjectType = "blob"
 	OBJECT_TAG    ObjectType = "tag"
 )
+
+// Returns true if object with given id exists in the repository.
+func (repo *Repository) IsObjectExist(objectId string) bool {
+	log("searching for object %s", objectId)
+	_, err := NewCommand("cat-file", "-e", objectId).RunInDir(repo.Path)
+	if err != nil {
+		log("search error: %v", err)
+	}
+	return err == nil
+}
